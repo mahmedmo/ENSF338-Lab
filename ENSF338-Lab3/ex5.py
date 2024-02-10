@@ -37,27 +37,34 @@ def binary_insertion_sort(arr):
         arr = arr[:j] + [val] + arr[j:i] + arr[i+1:]
     return arr
 
-size = 1
-#randomized arrays with elements valued from 1- 100 with size 5 incremented by each subsequent array
-arr_random = [[random.randint(1,100) for i in range(size + i)] for i in range(20)]
-print(len(arr_random[19]))
+#randomized arrays with elements valued from 1- 100 i is added by 10 each iteration to the size of the array
+arr_random = [[random.randint(1,100) for i in range(i*10)] for i in range(20)]
+
 insertion_sort_time = []
 binary_insertion_sort_time = []
 
 for x in range(20):
     #average case insertion_sort (n^2)
-    insertion_sort_time.append(timeit.timeit(lambda: insertion_sort(arr_random[x])))
-    print("insertion_sort: pass",x)
+    insertion_sort_time.append(timeit.timeit(lambda: insertion_sort(arr_random[x]), number=1))
+    print("insertion_sort: pass",x+1)
     #average case binary_insertion_sort (n^2)
-    binary_insertion_sort_time.append(timeit.timeit(lambda: binary_insertion_sort(arr_random[x])))
-    print("binary_insertion_sort: pass",x)
+    binary_insertion_sort_time.append(timeit.timeit(lambda: binary_insertion_sort(arr_random[x]),number=1))
+    print("binary_insertion_sort: pass",x+1)
 
-sizes = [1 + i for i in range(20)]  
+sizes = [(i*10)for i in range(20)]  
 
+#Insertion vs. Binary Insertion Plot
 plt.plot(sizes, insertion_sort_time, label='Insertion Sort (Average Case)', marker='o')
 plt.plot(sizes, binary_insertion_sort_time, label='Binary Insertion Sort (Average Case)', marker='x')
-plt.set_title('Average Case Performance')
-plt.set_xlabel('Array Size')
-plt.set_ylabel('Time (s)')
+plt.xlabel('Array Size')
+plt.ylabel('Time (s)')
 plt.legend()
 plt.show()
+
+#Question 4
+# The Binary Insertion sort and the traditional insertion sort algorithms are both the same complexity of O(n^2). 
+# However, despite this the binary insertion sort performs faster at greater array sizes. 
+# This occurs due to the faster algorithmic advantage Binary Insertion sort has in comparisons. 
+# It can search and find the value much more efficiently thanks to its use of binary search opposed to insertion sort’s linear search. 
+# However, this does not change its complexity as it still needs to complete the same number of swaps, 
+# the only benefit is its ability to find the value that must be swapped (or need to swap) faster.
