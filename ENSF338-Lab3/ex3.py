@@ -37,6 +37,9 @@ for i in range(0, 41):
     swaps_list.append(swps)
     print(f'{len(arr[i]):<10}{comps:<15}{swps:<15}')
 
+
+
+# ChatGPT used for help with plotting
 xvals = np.array(size_list)
 yvals_comps = np.array(comps_list)
 yvals_swaps = np.array(swaps_list)
