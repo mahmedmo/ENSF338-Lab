@@ -4,9 +4,9 @@ def merge_seperate(arr):
     
     mid = len(arr) // 2
     left = arr[:mid]
-    print("Pass", left)
+    print(left)
     right = arr[mid:]
-    print("Pass", right)
+    print(right)
 
     left = merge_seperate(left)
     right = merge_seperate(right)
@@ -38,7 +38,6 @@ def merge(left, right):
 #Firstly the function 'merge_seperate' will go on to divide in half n times for all the elements seperated.
 #Then 'merge' compares the left and right elements together and merges them into one subarray.
 #Next step the subarrays will be compared and swap around until sorted and create a bigger subarray and will keep going until the full array is sorted.
-
 
 #Question 3
 arr = [8, 42, 25, 3, 3, 1, 27, 3]
