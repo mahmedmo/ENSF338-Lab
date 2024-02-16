@@ -5,7 +5,8 @@ The time complexity for retrievals with a known index is O(1) for Arrays, but is
 
 ## 2. For arrays, we are interested in implementing a replace function that acts as a deletion followed by insertion. How can this function be implemented to minimize the impact of each of the standalone tasks? [0.1 pts]
 
-impact?
+For deletion, we could take the elements before the element that needs to be deleted and shift them to the right by one, overwriting the value of the element that needs to be deleted. We then update where the array starts to its correct position (+1).
+For insertion, we could take the elements at and after the point where we want to insert and shift them to thr right by 1, then insert the value into the empty space.
 
 
 ## 3. Assuming you are tasked to implement a doubly linked list with a sort function, given the list of sort functions below, state the feasibility of using each one of them and elaborate why is it possible or not to use them. [0.4 pts]
