@@ -4,9 +4,9 @@ def merge_seperate(arr):
     
     mid = len(arr) // 2
     left = arr[:mid]
-    print(left)
+    print("Split: ", (left))
     right = arr[mid:]
-    print(right)
+    print("Split: ", (right))
 
     left = merge_seperate(left)
     right = merge_seperate(right)
@@ -22,11 +22,11 @@ def merge(left, right):
         if left[left_index] < right[right_index]:
             merged.append(left[left_index])
             left_index += 1
-            print(merged)  #Question 3
+            print("Merge: ", (merged))  #Question 3
         else:
             merged.append(right[right_index])
             right_index += 1
-            print(merged) #Question 3
+            print("Merge: ", (merged)) #Question 3
    
     merged.extend(left[left_index:])
     merged.extend(right[right_index:])
@@ -46,4 +46,5 @@ sorted_arr = merge_seperate(arr)
 print(sorted_arr)
 
 #Question 4
-#Firstly it displays that 'merge_seperate' does divide 
+#Yes, the array splits in half in n steps to get each element alone.
+#Then takes the elements and adds them up in a linear manner similar to the time complexity
