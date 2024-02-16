@@ -12,4 +12,11 @@ def reverse(self):
     self.head = newhead
 
 def myreverse(self):
-    
+    currNode = self.head
+    prevNode = None
+    while currNode is not None:
+        nextNode = currNode.next
+        currNode.next = prevNode
+        prevNode = currNode
+        currNode = nextNode
+    self.head = prevNode

@@ -4,4 +4,4 @@ The time complexity of the reverse() implementation is O($n^2$). The for loop ru
 
 ## 2. Design an optimized implementation of the same function with better performance. Discuss which changes you made and how they should be expected to result in a better function [0.3 pts]
 
-
+With myreverse(), the function switches where the nodes are pointing to without making a new list and only traverses through the list once, resulting in a time complexity of O(n).
