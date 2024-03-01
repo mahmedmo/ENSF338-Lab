@@ -1,20 +1,26 @@
-
 import timeit
-
 import matplotlib.pyplot as plt
 import numpy as np
-import seaborn as sns
+
+# Question 3
+# For this question, we will use linear search (as inefficient implementation) and binary search (as efficient implementation) to search a sorted array.
+
+# Implementation of linear search, which will be our inefficient implementation.
+def linear_search(arr, target):
+    for i in range(len(arr)):
+        if arr[i] == target:
+            return i
+        
+    return -1
 
 
-#Question 3
-#For this question, we will use an ordinary binary search to search a sorted array.
-#Here is an efficient binary search example.
-def binary_search(sorted_array, target):
-    low, high = 0, len(sorted_array) - 1
+# Implementation of binary search, which will be our efficient implementation.
+def binary_search(arr, target):
+    low, high = 0, len(arr) - 1
 
     while low <= high:
         mid = (low + high) // 2
-        key = sorted_array[mid]
+        key = arr[mid]
         if key == target:
             return mid
         elif key < target:
@@ -24,58 +30,34 @@ def binary_search(sorted_array, target):
 
     return -1  
 
-sorted_array = input_array = [i for i in range(1, 1001)]
 
-def dif_binary_search(array, target, low=0, high=None):
-    if high is None:
-        high = len(array) - 1
-
-    if low <= high:
-        mid = (low + high) // 2
-        key = array[mid]
-
-        if key == target:
-            return mid
-        elif key < target:
-            return dif_binary_search(array, target, mid + 1, high)  
-        else:
-            return dif_binary_search(array, target, low, mid - 1)
-
-    return -1 
+# Question 4
+# The worst-case complexity for linear search is O(n), when the target is 1000, the last element in the array.
+# The worst-case complexity for binary search is O(logn), when the target is 500, where it must do the maximum number of divisions to reach the target.
 
 
-def measure_execution_time(func, *args, **kwargs):
-    start_time = timeit.default_timer()
-    result = func(*args, **kwargs)
-    end_time = timeit.default_timer()
-    execution_time = end_time - start_time
-    return execution_time
+# Question 5
+arr = [i for i in range(0, 1001)] # sorted input of 1000 elements
+linearsrch_times = []   # empty array for linear search times
+binarysrch_times = []   # empty array for binary search times
 
-# Experiment parameters
-input_size = 1000
+for x in range(1000):  # runs 1000 times
+    target = np.random.randint(0, 1000)    # selects random target from 1000 elements
+
+    linearsrch_time = timeit.timeit(lambda: linear_search(arr, target), number = 1) # times linear search
+    linearsrch_times.append(linearsrch_time)
+    
+    binarysrch_time = timeit.timeit(lambda: binary_search(arr, target), number = 1) # times binary search
+    binarysrch_times.append(binarysrch_time)
 
 
-# Generate a sorted array for the experiment
-input_array = [i for i in range(1, input_size + 1)]
-
-# Measure execution time for binary_search
-binary_search_times = [measure_execution_time(binary_search, input_array, np.random.randint(1, input_size + 1)) for _ in range(100)]
-
-# Measure execution time for dif_binary_search
-dif_binary_search_times = [measure_execution_time(dif_binary_search, input_array, np.random.randint(1, input_size + 1)) for _ in range(100)]
-
-# Plotting the distribution
-sns.set(style="whitegrid")
-plt.figure(figsize=(10, 6))
-
-sns.histplot(binary_search_times, bins=20, kde=True, label='binary_search')
-sns.histplot(dif_binary_search_times, bins=20, kde=True, label='dif_binary_search')
-
-plt.title('Distribution of Execution Times for Binary Search Implementations')
-plt.xlabel('Execution Time (seconds)')
+# plots the times and frequencies
+ax = plt.axes()
+ax.set_facecolor("gainsboro")
+plt.hist(linearsrch_times, bins=20, color="red", edgecolor="white", alpha=0.5, label='Inefficient (Linear Search)')
+plt.hist(binarysrch_times, bins=20, color="royalblue", edgecolor="black", alpha=0.5, label='Efficient (Binary Search)')
+plt.xlabel('Times')
 plt.ylabel('Frequency')
+plt.title('Execution Time Distribution')
 plt.legend()
-plt.show() 
-#Question 4
-#An ordinary binary search would have a worst complexity of O(log n)
-#The inefficient binary search would have a worst complexity of O(
+plt.show()
