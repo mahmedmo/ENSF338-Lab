@@ -185,32 +185,37 @@ array8000 = Array(8000)
 for i in range(8000):
     array8000[i] = i
 
+value_1000 = random.randint(0,1000)
+value_2000 = random.randint(0,2000)
+value_4000 = random.randint(0,4000)
+value_8000 = random.randint(0,8000)
+
 elapsed_time_list = []
 elapsed_time_array = []
 
 # 1000
 print("Running binary_search_linked_list() on linked list of size 1000...")
-elapsed_time_list.append((timeit.timeit(lambda: binary_search_linked_list(linked1000.head, random.randint(0, 1000)), number=1000)) / 1000)
+elapsed_time_list.append((timeit.timeit(lambda: binary_search_linked_list(linked1000.head, value_1000), number=1000))/1000)
 print("Running binary_search_array() on array of size 1000...")
-elapsed_time_array.append((timeit.timeit(lambda: binary_search_array(array1000.data, random.randint(0, 1000)), number=1000)) / 1000)
+elapsed_time_array.append((timeit.timeit(lambda: binary_search_array(array1000.data, value_1000), number=1000))/1000)
 
 # 2000
 print("Running binary_search_linked_list() on linked list of size 2000...")
-elapsed_time_list.append((timeit.timeit(lambda: binary_search_linked_list(linked2000.head, random.randint(0, 2000)), number=1000)) / 1000)
+elapsed_time_list.append((timeit.timeit(lambda: binary_search_linked_list(linked2000.head, value_2000), number=1000))/1000)
 print("Running binary_search_array() on array of size 2000...")
-elapsed_time_array.append((timeit.timeit(lambda: binary_search_array(array2000.data, random.randint(0, 2000)), number=1000)) / 1000)
+elapsed_time_array.append((timeit.timeit(lambda: binary_search_array(array2000.data, value_2000), number=1000))/1000)
 
 # 4000
 print("Running binary_search_linked_list() on linked list of size 4000...")
-elapsed_time_list.append((timeit.timeit(lambda: binary_search_linked_list(linked4000.head, random.randint(0, 4000)), number=1000)) / 1000)
+elapsed_time_list.append((timeit.timeit(lambda: binary_search_linked_list(linked4000.head, value_4000), number=1000))/1000)
 print("Running binary_search_array() on array of size 4000...")
-elapsed_time_array.append((timeit.timeit(lambda: binary_search_array(array4000.data, random.randint(0, 4000)), number=1000)) / 1000)
+elapsed_time_array.append((timeit.timeit(lambda: binary_search_array(array4000.data, value_4000), number=1000))/1000)
 
 # 8000
 print("Running binary_search_linked_list() on linked list of size 8000...")
-elapsed_time_list.append((timeit.timeit(lambda: binary_search_linked_list(linked8000.head,random.randint(0, 8000)), number=1000)) / 1000)
+elapsed_time_list.append((timeit.timeit(lambda: binary_search_linked_list(linked8000.head, value_8000), number=1000))/1000)
 print("Running binary_search_array() on array of size 8000...")
-elapsed_time_array.append((timeit.timeit(lambda: binary_search_array(array8000.data, random.randint(0, 8000)), number=1000)) / 1000)
+elapsed_time_array.append((timeit.timeit(lambda: binary_search_array(array8000.data, value_8000), number=1000))/1000)
 
 print(elapsed_time_list, elapsed_time_array)
 
