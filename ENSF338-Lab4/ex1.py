@@ -2,54 +2,92 @@ import random
 import sys
 import timeit
 
+import matplotlib.gridspec as gridspec
 import matplotlib.pyplot as plt
 
 sys.setrecursionlimit(30000)
 
-#Question 1
+# Question 1
 class ListNode:
     def __init__(self, value):
         self.data = value
         self.next = None
 
     def getData(self):
-        return self._value
+        return self.data
 
     def setData(self, value):
-        self._value = value
+        self.data = value
 
     def getNext(self):
-        return self._next
+        return self.next
 
     def setNext(self, next):
-        self._next = next
+        self.next = next
 
     def toString(self):
-        return str(self._value)
-    
-  
-#Question 2
-def newNode(x):
+        return str(self.data)
 
-    temp = ListNode(0)
-    temp.data = x
-    temp.next = None
-    return temp
+class LinkedList:
+    def __init__(self):
+        self.head = None
 
-def binary_search(head, value):
+    def insert_head(self, new_data):
+        new_node = ListNode(new_data)
+        new_node.next = self.head
+        self.head = new_node
+
+    def insert_tail(self, new_data):
+        new_node = ListNode(new_data)
+        if self.head is None:
+            self.head = new_node
+        else:
+            curr = self.head
+            while curr.next:
+                curr = curr.next
+            curr.next = new_node
+
+    def get_size(self):
+        curr = self.head
+        count = 0
+        while curr:
+            count += 1
+            curr = curr.next
+        return count
+
+    def get_element_at_position(self, pos):
+        curr = self.head
+        count = 0
+        while curr:
+            if count == pos:
+                return curr
+            count += 1
+            curr = curr.next
+        return None
+
+    def display(self):
+        elements = []
+        currNode = self.head
+        while currNode:
+            elements.append(currNode.data)
+            currNode = currNode.next
+        return elements
+
+# Question 2
+def binary_search_linked_list(head, value):
     start = head
     last = None
     while True:
         mid = middle(start, last)
-        if (mid == None):
+        if mid is None:
             return None
-        if (mid.data == value):
+        if mid.data == value:
             return mid
-        elif (mid.data < value):
+        elif mid.data < value:
             start = mid.next
         else:
             last = mid
-        if not (last == None or last != start):
+        if not (last is None or last != start):
             break
     return None
 
@@ -67,31 +105,144 @@ def middle(start, last):
 
     return slow
 
+# Question 3
+class Array:
+    def __init__(self, size):
+        self.size = size
+        self.data = [None] * size
 
-#With the help of ChatGPT
-def create_linked_list(size):
-    head = newNode(0)
-    current = head
-    for i in range(1, size):
-        current.next = newNode(i)
-        current = current.next
-    return head
+    def __getitem__(self, index):
+        if 0 <= index < self.size:
+            return self.data[index]
+        else:
+            raise IndexError("Index out of range")
 
-def measure_average_case(size):
-    linked_list_head = create_linked_list(size)
-    target_value = random.randint(0, size - 1)
-    time_taken = timeit.timeit(lambda: binary_search(linked_list_head, target_value), number=1000)
-    return time_taken
+    def __setitem__(self, index, value):
+        if 0 <= index < self.size:
+            self.data[index] = value
+        else:
+            raise IndexError("Index out of range")
 
-# List of input sizes
-input_sizes = [1000, 2000, 4000, 8000]
+    def __len__(self):
+        return self.size
 
-# Measure average-case performance for each input size
-average_times = [measure_average_case(size) for size in input_sizes]
+    def __repr__(self):
+        return repr(self.data)
 
-# Plotting the results
-plt.plot(input_sizes, average_times, marker='o')
-plt.title('Average-case Performance of Binary Search on Linked List')
-plt.xlabel('Linked List Size')
-plt.ylabel('Average Time (seconds)')
+def binary_search_array(arr, value):
+    low, high = 0, len(arr) - 1
+
+    while low <= high:
+        mid = (low + high) // 2
+        mid_value = arr[mid]
+
+        if mid_value == value:
+            return mid
+        elif mid_value < value:
+            low = mid + 1
+        else:
+            high = mid - 1
+
+    return None
+
+# Question 4
+# The time complexity when performing a binary search on a linked list should be O(n) where n represents the number of nodes.
+
+# Question 5
+# With the help of ChatGPT
+# Function to measure the average-case performance
+
+sizes = [1000, 2000, 4000, 8000]
+linked1000 = LinkedList()
+for i in range(1000):
+    linked1000.insert_tail(i)
+
+linked2000 = LinkedList()
+for i in range(2000):
+    linked2000.insert_tail(i)
+
+linked4000 = LinkedList()
+for i in range(4000):
+    linked4000.insert_tail(i)
+
+linked8000 = LinkedList()
+for i in range(8000):
+    linked8000.insert_tail(i)
+
+array1000 = Array(1000)
+for i in range(1000):
+    array1000[i] = i
+
+array2000 = Array(2000)
+for i in range(2000):
+    array2000[i] = i
+
+array4000 = Array(4000)
+for i in range(4000):
+    array4000[i] = i
+
+array8000 = Array(8000)
+for i in range(8000):
+    array8000[i] = i
+
+elapsed_time_list = []
+elapsed_time_array = []
+
+# 1000
+print("Running binary_search_linked_list() on linked list of size 1000...")
+elapsed_time_list.append((timeit.timeit(lambda: binary_search_linked_list(linked1000.head, random.randint(0, 1000)), number=1000)) / 1000)
+print("Running binary_search_array() on array of size 1000...")
+elapsed_time_array.append((timeit.timeit(lambda: binary_search_array(array1000.data, random.randint(0, 1000)), number=1000)) / 1000)
+
+# 2000
+print("Running binary_search_linked_list() on linked list of size 2000...")
+elapsed_time_list.append((timeit.timeit(lambda: binary_search_linked_list(linked2000.head, random.randint(0, 2000)), number=1000)) / 1000)
+print("Running binary_search_array() on array of size 2000...")
+elapsed_time_array.append((timeit.timeit(lambda: binary_search_array(array2000.data, random.randint(0, 2000)), number=1000)) / 1000)
+
+# 4000
+print("Running binary_search_linked_list() on linked list of size 4000...")
+elapsed_time_list.append((timeit.timeit(lambda: binary_search_linked_list(linked4000.head, random.randint(0, 4000)), number=1000)) / 1000)
+print("Running binary_search_array() on array of size 4000...")
+elapsed_time_array.append((timeit.timeit(lambda: binary_search_array(array4000.data, random.randint(0, 4000)), number=1000)) / 1000)
+
+# 8000
+print("Running binary_search_linked_list() on linked list of size 8000...")
+elapsed_time_list.append((timeit.timeit(lambda: binary_search_linked_list(linked8000.head,random.randint(0, 8000)), number=1000)) / 1000)
+print("Running binary_search_array() on array of size 8000...")
+elapsed_time_array.append((timeit.timeit(lambda: binary_search_array(array8000.data, random.randint(0, 8000)), number=1000)) / 1000)
+
+print(elapsed_time_list, elapsed_time_array)
+
+
+#Question 6
+fig = plt.figure(figsize=(12, 10))
+
+gs = gridspec.GridSpec(2, 2, height_ratios=[1, 1])
+ax0 = plt.subplot(gs[0])
+ax1 = plt.subplot(gs[1])
+ax2 = plt.subplot(gs[2:])
+
+# Plot for linkedlist()
+ax0.plot(sizes, elapsed_time_list, label='linkedlist()', marker='o')
+ax0.set_title('Sizes vs Times for linkedlist()')
+ax0.set_xlabel('Sizes')
+ax0.set_ylabel('Time for linkedlist()')
+
+# Plot for array()
+ax1.plot(sizes, elapsed_time_array, label='array()', marker='o')
+ax1.set_title('Sizes vs Times for array()')
+ax1.set_xlabel('Sizes')
+ax1.set_ylabel('Time for array()')
+
+# Plot with both linkedlist() and array()
+ax2.plot(sizes, elapsed_time_list, label='linkedlist()', marker='o')
+ax2.plot(sizes, elapsed_time_array, label='array()', marker='o')
+ax2.set_title('Sizes vs Times')
+ax2.set_xlabel('Sizes')
+ax2.set_ylabel('Times')
+ax2.legend()
+
+plt.tight_layout()
 plt.show()
+
