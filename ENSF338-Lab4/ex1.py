@@ -214,33 +214,12 @@ print("Array Times", elapsed_time_array)
 
 
 #Question 6
-fig = plt.figure(figsize=(12, 10))
 
-gs = gridspec.GridSpec(2, 2, height_ratios=[1, 1])
-ax0 = plt.subplot(gs[0])
-ax1 = plt.subplot(gs[1])
-ax2 = plt.subplot(gs[2:])
-
-# Plot for linkedlist()
-ax0.plot(sizes, elapsed_time_list, label='linkedlist()', marker='o')
-ax0.set_title('Sizes vs Times for linkedlist()')
-ax0.set_xlabel('Sizes')
-ax0.set_ylabel('Time for linkedlist()')
-
-# Plot for array()
-ax1.plot(sizes, elapsed_time_array, label='array()', marker='o')
-ax1.set_title('Sizes vs Times for array()')
-ax1.set_xlabel('Sizes')
-ax1.set_ylabel('Time for array()')
-
-# Plot with both linkedlist() and array()
-ax2.plot(sizes, elapsed_time_list, label='linkedlist()', marker='o')
-ax2.plot(sizes, elapsed_time_array, label='array()', marker='o')
-ax2.set_title('Sizes vs Times')
-ax2.set_xlabel('Sizes')
-ax2.set_ylabel('Times')
-ax2.legend()
-
-plt.tight_layout()
+plt.figure(figsize=(10, 6))
+plt.plot(sizes, elapsed_time_list, label='linkedlist()', marker='o')
+plt.plot(sizes, elapsed_time_array, label='array()', marker='o')
+plt.xlabel('Size')
+plt.ylabel('Times')
+plt.legend()
+plt.title('Performance of Binary Search')
 plt.show()
-
