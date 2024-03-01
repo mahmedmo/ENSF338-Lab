@@ -194,30 +194,23 @@ elapsed_time_list = []
 elapsed_time_array = []
 
 # 1000
-print("Running binary_search_linked_list() on linked list of size 1000...")
 elapsed_time_list.append((timeit.timeit(lambda: binary_search_linked_list(linked1000.head, value_1000), number=1000))/1000)
-print("Running binary_search_array() on array of size 1000...")
 elapsed_time_array.append((timeit.timeit(lambda: binary_search_array(array1000.data, value_1000), number=1000))/1000)
 
 # 2000
-print("Running binary_search_linked_list() on linked list of size 2000...")
 elapsed_time_list.append((timeit.timeit(lambda: binary_search_linked_list(linked2000.head, value_2000), number=1000))/1000)
-print("Running binary_search_array() on array of size 2000...")
 elapsed_time_array.append((timeit.timeit(lambda: binary_search_array(array2000.data, value_2000), number=1000))/1000)
 
 # 4000
-print("Running binary_search_linked_list() on linked list of size 4000...")
 elapsed_time_list.append((timeit.timeit(lambda: binary_search_linked_list(linked4000.head, value_4000), number=1000))/1000)
-print("Running binary_search_array() on array of size 4000...")
 elapsed_time_array.append((timeit.timeit(lambda: binary_search_array(array4000.data, value_4000), number=1000))/1000)
 
 # 8000
-print("Running binary_search_linked_list() on linked list of size 8000...")
 elapsed_time_list.append((timeit.timeit(lambda: binary_search_linked_list(linked8000.head, value_8000), number=1000))/1000)
-print("Running binary_search_array() on array of size 8000...")
 elapsed_time_array.append((timeit.timeit(lambda: binary_search_array(array8000.data, value_8000), number=1000))/1000)
 
-print(elapsed_time_list, elapsed_time_array)
+print("List Times", elapsed_time_list)
+print("Array Times", elapsed_time_array)
 
 
 #Question 6
