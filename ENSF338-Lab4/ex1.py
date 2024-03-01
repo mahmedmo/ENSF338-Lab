@@ -214,6 +214,7 @@ print("Array Times", elapsed_time_array)
 
 
 #Question 6
+# Array times looks flat but this may be due to Linked List times being that much slower than Array times.
 
 plt.figure(figsize=(10, 6))
 plt.plot(sizes, elapsed_time_list, label='linkedlist()', marker='o')
