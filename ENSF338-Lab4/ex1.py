@@ -67,6 +67,8 @@ def middle(start, last):
 
     return slow
 
+
+#With the help of ChatGPT
 def create_linked_list(size):
     head = newNode(0)
     current = head
