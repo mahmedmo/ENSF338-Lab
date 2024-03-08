@@ -24,10 +24,15 @@ class Node:
         self.data = data
         self.next = None
 
+class Node:
+    def __init__(self, data=None):
+        self.data = data
+        self.next = None
+
 class Queue2:
     def __init__(self):
-        self.head = None
-        self.tail = None
+        self.front = None
+        self.rear = None
 
     def enqueue(self, item):
         new_node = Node(item)
@@ -42,26 +47,24 @@ class Queue2:
             return None
         
         if not self.is_empty():
-            current = self.head
-            prev = None
+            data = self.front.data
+            self.front = self.front.next
+            if self.front is None:
+                # If dequeued the last element, update rear as well
+                self.rear = None
+            return data
+        else:
+            print("Cannot dequeue from an empty queue")
 
-            while current.next:
-                prev = current
-                current = current.next
-
-            if prev:
-                prev.next = None
-                self.tail = prev
-
-            else:
-                self.head = None
-                self.tail = None
-
-            return current.data
+    def peek(self):
+        if not self.is_empty():
+            return self.front.data
+        else:
+            return None
 
     def is_empty(self):
-        return self.head is None
-
+        return self.front is None
+    
 q1 = Queue1()
 q2 = Queue2()
 #Question 3
