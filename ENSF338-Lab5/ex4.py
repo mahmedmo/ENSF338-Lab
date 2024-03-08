@@ -40,11 +40,9 @@ class Queue2:
     def enqueue(self, element):
         new_node = Node(element)
         if self.is_empty():
-            # If the queue is empty, both front and rear point to the new node
             self.front = new_node
             self.rear = new_node
         else:
-            # Add the new node at the rear
             self.rear.next = new_node
             self.rear = new_node
 
@@ -53,7 +51,6 @@ class Queue2:
             data = self.front.data
             self.front = self.front.next
             if self.front is None:
-                # If dequeued the last element, update rear as well
                 self.rear = None
             return data
         else:
