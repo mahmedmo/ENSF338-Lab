@@ -15,9 +15,8 @@ class Queue1:
         self.rear += 1
 
     def dequeue(self):
-        x = self.queue.pop(0)
         self.rear -= 1
-    
+        return self.queue.pop(0)
 
 #Question 2
 class Node:
@@ -32,8 +31,8 @@ class Queue2:
 
     def enqueue(self, item):
         new_node = Node(item)
-        new_node.next = self.head
-        self.head = new_node
+        new_node.next = self.tail
+        self.tail = new_node
 
     def dequeue(self):
         if not self.is_empty():

@@ -101,7 +101,14 @@ class CircularLinkedListQueue:
             current = current.next
         return count
     
-    
+    def peek(self):
+        if not self.is_empty():
+            data = self.head.data
+            print(f"peek {data}")
+            return self.head.data
+        else:
+            print(f"peek None")
+            
 #Question 3
 myarray = CircularQueueArray(12)
 print('Operations for Array Queue')
@@ -217,9 +224,9 @@ mylist.peek()      # peek 5
 mylist.dequeue()   # dequeue 5
 
 # Enqueue more elements
-mylist.enqueue(15) # enqueue 15
 mylist.enqueue(16) # enqueue 16
 mylist.enqueue(17) # enqueue 17
+mylist.enqueue(18) # enqueue 18
 
 # Peek operation
 mylist.peek()      # peek 6
@@ -231,12 +238,15 @@ mylist.dequeue()   # dequeue 6
 mylist.peek()      # peek 7
 
 #Dequeue operations
+mylist.dequeue()   # dequeue 7
 mylist.dequeue()   # dequeue 8
 mylist.dequeue()   # dequeue 9
 mylist.dequeue()   # dequeue 10
 mylist.dequeue()   # dequeue 11
 mylist.dequeue()   # dequeue 12
+mylist.dequeue()   # dequeue 13
 mylist.dequeue()   # dequeue 14
+mylist.dequeue()   # dequeue 15
 mylist.dequeue()   # dequeue 16
 mylist.dequeue()   # dequeue 17
 
