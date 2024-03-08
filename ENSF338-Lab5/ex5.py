@@ -255,7 +255,3 @@ mylist.dequeue()   # Queue is empty. Cannot dequeue.
 
 # Attempting to peek an empty queue
 mylist.peek()      # Queue is empty. Cannot peek.
-
-
-
-
