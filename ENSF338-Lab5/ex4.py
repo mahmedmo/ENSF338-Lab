@@ -8,15 +8,18 @@ import matplotlib.pyplot as plt
 class Queue1:
     def __init__(self):
         self.queue = []
- 
-    def enqueue(self, item):
-        self.queue.insert(0, item)
+
+    def enqueue(self, element):
+        self.queue.append(element)
 
     def dequeue(self):
-        if len(self.queue) < 1:
-            return None
-        return self.queue.pop()
-    
+        if not self.is_empty():
+            return self.queue.pop(0)
+        else:
+            print("Cannot dequeue from an empty queue")
+
+    def is_empty(self):
+        return len(self.queue) == 0
 
 #Question 2
 class Node:
@@ -34,18 +37,18 @@ class Queue2:
         self.front = None
         self.rear = None
 
-    def enqueue(self, item):
-        new_node = Node(item)
-        if self.tail is not None:
-            self.tail.next = new_node
-        self.tail = new_node
-        if self.head is None:
-            self.head = self.tail
+    def enqueue(self, element):
+        new_node = Node(element)
+        if self.is_empty():
+            # If the queue is empty, both front and rear point to the new node
+            self.front = new_node
+            self.rear = new_node
+        else:
+            # Add the new node at the rear
+            self.rear.next = new_node
+            self.rear = new_node
 
     def dequeue(self):
-        if self.is_empty():
-            return None
-        
         if not self.is_empty():
             data = self.front.data
             self.front = self.front.next
@@ -70,9 +73,8 @@ q2 = Queue2()
 #Question 3
 def generate_random_tasks():
     tasks = []
-    for _ in range(10):
+    for _ in range(10000):
         task = random.choices(["enqueue", "dequeue"], weights=[0.7, 0.3])[0]
-        print(task)
         tasks.append(task)
     return tasks
 
