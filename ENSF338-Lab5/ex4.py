@@ -8,15 +8,18 @@ import matplotlib.pyplot as plt
 class Queue1:
     def __init__(self):
         self.queue = []
-        self.front = self.rear = 0
- 
-    def enqueue(self, data):
-        self.queue.append(data)
-        self.rear += 1
+
+    def enqueue(self, element):
+        self.queue.append(element)
 
     def dequeue(self):
-        self.rear -= 1
-        return self.queue.pop(0)
+        if not self.is_empty():
+            return self.queue.pop(0)
+        else:
+            print("Cannot dequeue from an empty queue")
+
+    def is_empty(self):
+        return len(self.queue) == 0
 
 #Question 2
 class Node:
@@ -24,38 +27,47 @@ class Node:
         self.data = data
         self.next = None
 
+class Node:
+    def __init__(self, data=None):
+        self.data = data
+        self.next = None
+
 class Queue2:
     def __init__(self):
-        self.head = None
-        self.tail = None
+        self.front = None
+        self.rear = None
 
-    def enqueue(self, item):
-        new_node = Node(item)
-        new_node.next = self.tail
-        self.tail = new_node
+    def enqueue(self, element):
+        new_node = Node(element)
+        if self.is_empty():
+            # If the queue is empty, both front and rear point to the new node
+            self.front = new_node
+            self.rear = new_node
+        else:
+            # Add the new node at the rear
+            self.rear.next = new_node
+            self.rear = new_node
 
     def dequeue(self):
         if not self.is_empty():
-            current = self.head
-            prev = None
+            data = self.front.data
+            self.front = self.front.next
+            if self.front is None:
+                # If dequeued the last element, update rear as well
+                self.rear = None
+            return data
+        else:
+            print("Cannot dequeue from an empty queue")
 
-            while current.next:
-                prev = current
-                current = current.next
-
-            if prev:
-                prev.next = None
-                self.tail = prev
-
-            else:
-                self.head = None
-                self.tail = None
-
-            return current.data
+    def peek(self):
+        if not self.is_empty():
+            return self.front.data
+        else:
+            return None
 
     def is_empty(self):
-        return self.head is None
-
+        return self.front is None
+    
 q1 = Queue1()
 q2 = Queue2()
 #Question 3
