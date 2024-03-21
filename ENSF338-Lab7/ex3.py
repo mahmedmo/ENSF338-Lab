@@ -1,98 +1,126 @@
 class Node:
-    def __init__(self, data, parent=None, left=None, right=None):
-        self.parent = parent
+    def __init__(self, data, left=None, right=None, height=1):
         self.data = data
         self.left = left
         self.right = right
-        self.balance = 0
+        self.height = height
 
-class AVLTree:
-    def __init__(self):
-        self.root = None
+class BSTTree(object):
+    
+    # Rotations aided by ChatGPT
+    def _right_rotate(self, z):
+        y = z.left
+        T3 = y.right
 
-    def insert(self, data):
-        self.root = self._insert(data, self.root)
+        y.right = z
+        z.left = T3
 
-    def _insert(self, data, node):
-        if node is None:
-            return Node(data)
+        z.height = 1 + max(self.get_height(z.left), self.get_height(z.right))
+        y.height = 1 + max(self.get_height(y.left), self.get_height(y.right))
+        return y
 
-        if data <= node.data:
-            node.left = self._insert(data, node.left)
+    def _left_rotate(self, z):
+        y = z.right
+        T2 = y.left
+
+        y.left = z
+        z.right = T2
+
+        z.height = 1 + max(self.get_height(z.left), self.get_height(z.right))
+        y.height = 1 + max(self.get_height(y.left), self.get_height(y.right))
+
+        return y
+
+    def insert(self, root, data):
+        path = []
+        root = self.insert_helper(root, data, path)
+        
+        pivot_index = self.find_pivot_index(path)
+        if pivot_index == -1:
+            print("Case #1: Pivot not detected.")
+            self.adjust_balances(path, 0, len(path), data)
         else:
-            node.right = self._insert(data, node.right)
-
-        self.update_balances(node)
-
-        pivot = self.find_pivot(node)
-        if pivot is None:
-            print("Case #1: Pivot not detected")
-        elif abs(pivot.balance) > 1:
-            if (data <= pivot.data and pivot.balance > 0) or (data > pivot.data and pivot.balance < 0):
-                print("Case #2: A pivot exists, and a node was added to the shorter subtree")
+            pivot = path[pivot_index]
+            balance = self.get_balance(pivot)
+            if ((balance == 1 and data < pivot.data) or
+                (balance == -1 and data > pivot.data)):
+                print("Case #2: A pivot exists, and a node was added to the shorter subtree.")
+                self.adjust_balances(path, pivot_index, len(path), data)
             else:
-                print("Case #3: not supported")
-                if data <= pivot.data and pivot.left:
-                    if data <= pivot.left.data:
-                        self._right_rotate(pivot)
-        else:
-            print("No imbalance after insertion")
+                if pivot_index + 1 < len(path):
+                    son = path[pivot_index + 1]
+                    if (balance == -1 and data < son.data) or (balance == 1 and data > son.data):
+                        print("Case #3a: Adding a node to an outside subtree.")
+                        if balance == -1:
+                            root = self._right_rotate(pivot)  
+                        else:
+                            root = self._left_rotate(pivot)  
+                    else:
+                        print("Case #3b: Not supported.")
+                
 
+        return root
+
+    def insert_helper(self, node, data, path):
+        if not node:
+            return Node(data)
+        elif data < node.data:
+            path.append(node)
+            node.left = self.insert_helper(node.left, data, path)
+        else:
+            path.append(node)
+            node.right = self.insert_helper(node.right, data, path)
+        
+        node.height = 1 + max(self.get_height(node.left), self.get_height(node.right))
         return node
 
-    def update_balances(self, node):
-        if node is None:
-            return
-        while node.parent:
-            if node.parent.left == node:
-                node.parent.balance += 1
+    def find_pivot_index(self, path):
+        for i in reversed(range(len(path))):
+            if self.get_balance(path[i]) != 0:
+                return i
+        return -1
+
+    def adjust_balances(self, path, start, end, data):
+        for i in range(start, end):
+            if data < path[i].data:
+                path[i].height -= 1  
             else:
-                node.parent.balance -= 1
-            node = node.parent
+                path[i].height += 1
 
-    def find_pivot(self, node):
-        while node:
-            if abs(node.balance) > 1:
-                return node
-            node = node.parent
-        return None
+    def get_height(self, root):
+        if not root:
+            return 0
+        return root.height
 
-    def _right_rotate(self, pivot):
-        if pivot.left is None:
+    def get_balance(self, root):
+        if not root:
+            return 0
+        return self.get_height(root.left) - self.get_height(root.right)
+    # For self testing
+    def pre_order(self, root):
+        if not root:
             return
-        new_root = pivot.left
-        pivot.left = new_root.right
-        if new_root.right:
-            new_root.right.parent = pivot
-        new_root.parent = pivot.parent
-        if pivot.parent is None:
-            self.root = new_root
-        elif pivot is pivot.parent.right:
-            pivot.parent.right = new_root
-        else:
-            pivot.parent.left = new_root
-        new_root.right = pivot
-        pivot.parent = new_root
-        # Update balances after rotation
-        pivot.balance -= 1 + max(new_root.balance, 0)
-        new_root.balance -= 1 - min(pivot.balance, 0)
+        print(f"{root.data} ", end="")
+        self.pre_order(root.left)
+        self.pre_order(root.right)
 
-# Test case to check right rotation
-def test_right_rotation():
-    tree = AVLTree()
-    tree.insert(5)
-    tree.insert(3)
-    tree.insert(2)
-    print("Before rotation:")
-    print("Root:", tree.root.data)
-    print("Root's left child:", tree.root.left.data)
-    print("Left child's left child:", tree.root.left.left.data if tree.root.left.left else None)
-
-    tree._right_rotate(tree.root)
-
-    print("\nAfter rotation:")
-    print("Root:", tree.root.data)
-    print("Root's right child:", tree.root.right.data)
-    print("Right child's left child:", tree.root.right.left.data if tree.root.right.left else None)
-
-test_right_rotation()
+tree = BSTTree()
+root = None
+# Test cases aided with ChatGPT
+print("TESTING CASE 1...")
+root = tree.insert(root, 3)  
+print("TESTING CASE 1 DONE...\n")
+print("TESTING CASE 2...")
+root = tree.insert(root, 1)  
+print("TESTING CASE 2 DONE...\n")
+print("TESTING CASE 3a...")
+root = tree.insert(root, 5)
+root = tree.insert(root, 2)  
+root = tree.insert(root, 4)  
+root = tree.insert(root, 6)  
+print("TESTING CASE 3a DONE...\n")
+print("TESTING CASE 3b...")
+root = tree.insert(root, 3)  
+root = tree.insert(root, 1)  
+root = tree.insert(root, 2)  
+print("TESTING CASE 3b DONE...\n")
