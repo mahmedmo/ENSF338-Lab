@@ -2,6 +2,7 @@
 class GraphNode:
     def __init__(self, data):
         self.data = data
+        self.edges = {}
 
 class Graph:
     def __init__(self):
@@ -59,5 +60,7 @@ class Graph:
         except Exception as e:
             # return null if there are errors
             return None
-        
-        
+
+    def printGraph(self):
+        for node, graphnode in self.nodes.items():
+            print(f"Node {node} has edges: {graphnode.edges}")
