@@ -20,13 +20,58 @@ class Graph:
         if n1 in self.nodes and n2 in self.nodes:
             if n1 not in self.nodes[n2].edges:
                 self.nodes[n1].edges[n2] = weight
-                self.nodes[n2].edges[n1] = weight
 
     def removeEdge(self, n1, n2):
         if n1 in self.nodes and n2 in self.nodes:
             if n1 in self.nodes[n2].edges:
                 del self.nodes[n1].edges[n2]
-                del self.nodes[n2].edges[n1]
+
+    def isdag(self):
+        visited = set()
+        stack = set()
+
+        def dfs(node):
+            visited.add(node)
+            stack.add(node)
+
+            for neighbor in self.nodes[node].edges:
+                if neighbor not in visited:
+                    if dfs(neighbor):
+                        return True
+                elif neighbor in stack:
+                    return True
+
+            stack.remove(node)
+            return False
+
+        for node in self.nodes:
+            if node not in visited:
+                if dfs(node):
+                    return False
+
+        return True
+
+    def toposort(self):
+        if not self.isdag():
+            return None
+
+        visited = set()
+        stack = []
+
+        def dfs(node):
+            visited.add(node)
+
+            for neighbor in self.nodes[node].edges:
+                if neighbor not in visited:
+                    dfs(neighbor)
+
+            stack.append(node)
+
+        for node in self.nodes:
+            if node not in visited:
+                dfs(node)
+
+        return stack[::-1]
 
     def importFromFile(self, file):
         # clears nodes
@@ -46,108 +91,55 @@ class Graph:
                 n1 = parts[0].strip()
                 n2 = parts[1].split('[')[0].strip()
 
-                weight = 1
-                if '[' in parts[1] and 'weight' in parts[1]:
-                    weight = int(parts[1].split('weight=')[1].split(']')[0])
-
                 if n1 not in self.nodes:
                     self.addNode(n1)
                 if n2 not in self.nodes:
                     self.addNode(n2)
+
+                weight = 1
+                if '[' in parts[1] and 'weight' in parts[1]:
+                    weight = int(parts[1].split('weight=')[1].split(']')[0])
+
                 self.addEdge(n1, n2, weight)
 
         except Exception as e:
             # return null if there are errors
             return None
 
-    def isdag(self):
-        visited = set()
-        in_stack = set()
+    def printGraph(self):
+        for node, graphnode in self.nodes.items():
+            print(f"Node {node} has edges: {graphnode.edges}")
 
-        def dfs(node):
-            visited.add(node)
-            in_stack.add(node)
+graph1 = Graph()
+graph1.addNode('A')
+graph1.addNode('B')
+graph1.addNode('C')
+graph1.addEdge('A', 'B', 1)
+graph1.addEdge('B', 'C', 1)
 
-            for neighbor in self.nodes[node].edges:
-                if neighbor not in visited:
-                    if dfs(neighbor):
-                        return True
-                elif neighbor in in_stack:
-                    return True
+print("Test case 1:")
+print("Graph is a DAG:", graph1.isdag())  # True
+print("Topological order:", graph1.toposort())  # ['A', 'B', 'C']
 
-            in_stack.remove(node)
-            return False
+# Test case 2: A cyclic graph
+graph2 = Graph()
+graph2.addNode('A')
+graph2.addNode('B')
+graph2.addNode('C')
+graph2.addEdge('A', 'B', 1)
+graph2.addEdge('B', 'C', 1)
+graph2.addEdge('C', 'A', 1)
 
-        for node in self.nodes:
-            if node not in visited:
-                if dfs(node):
-                    return False
+print("\nTest case 2:")
+print("Graph is a DAG:", graph2.isdag())  # False
+print("Topological order:", graph2.toposort())  # None
 
-        return True
+# Test case 3: A disconnected graph
+graph3 = Graph()
+graph3.addNode('A')
+graph3.addNode('B')
+graph3.addNode('C')
 
-    def toposort(self):
-        if not self.isdag():
-            return None
-        
-        in_degree = {node: 0 for node in self.nodes}
-        for node in self.nodes:
-            for neighbor in self.nodes[node].edges:
-                in_degree[neighbor] += 1
-
-        queue = [node for node in self.nodes if in_degree[node] == 0]
-        topo_order = []
-
-        while queue:
-            current = queue.pop(0)
-            topo_order.append(current)
-
-            for neighbor in self.nodes[current].edges:
-                in_degree[neighbor] -= 1
-                if in_degree[neighbor] == 0:
-                    queue.append(neighbor)
-
-        return topo_order if len(topo_order) == len(self.nodes) else None
-    
-# Test 1: Create a graph, add nodes, and edges
-graph = Graph()
-node_a = graph.addNode('A')
-node_b = graph.addNode('B')
-node_c = graph.addNode('C')
-node_d = graph.addNode('D')
-node_e = graph.addNode('E')
-
-graph.addEdge('A', 'B', 1)
-graph.addEdge('A', 'C', 1)
-graph.addEdge('B', 'D', 1)
-graph.addEdge('C', 'D', 1)
-graph.addEdge('D', 'E', 1)
-
-# Test 2: Check if the graph is a DAG
-print("Is the graph a DAG?", graph.isdag())  # Output: True
-
-# Test 3: Check topological sorting for a DAG
-print("Topological order:", graph.toposort())  # Output: ['A', 'C', 'B', 'D', 'E']
-
-# Test 4: Remove an edge to introduce a cycle
-graph.removeEdge('C', 'D')
-
-# Test 5: Check if the graph is still a DAG
-print("Is the graph a DAG?", graph.isdag())  # Output: False
-
-# Test 6: Check topological sorting for a graph with a cycle
-print("Topological order:", graph.toposort())  # Output: None
-
-# Test 7: Remove a node
-graph.removeNode(node_c)
-
-# Test 8: Check if the graph is still a DAG after node removal
-print("Is the graph a DAG?", graph.isdag())  # Output: True
-
-# Test 9: Import graph from file
-graph.importFromFile('test_graph.txt')
-
-# Test 10: Check if the imported graph is a DAG
-print("Is the imported graph a DAG?", graph.isdag())  # Output: True
-
-# Test 11: Check topological sorting for the imported graph
-print("Topological order for imported graph:", graph.toposort())  # Output: Topological order list or None
+print("\nTest case 3:")
+print("Graph is a DAG:", graph3.isdag())  # True
+print("Topological order:", graph3.toposort())  # ['A', 'B', 'C']
