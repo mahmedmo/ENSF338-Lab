@@ -110,6 +110,8 @@ class Graph:
         for node, graphnode in self.nodes.items():
             print(f"Node {node} has edges: {graphnode.edges}")
 
+# Test case 1: Acyclic graph
+
 graph1 = Graph()
 graph1.addNode('A')
 graph1.addNode('B')
@@ -142,7 +144,7 @@ graph3.addNode('C')
 
 print("\nTest case 3:")
 print("Graph is a DAG:", graph3.isdag())  # True
-print("Topological order:", graph3.toposort())  # ['A', 'B', 'C']
+print("Topological order:", graph3.toposort())  # Nodes in any order because they are all disconnected
 
 graphrand = Graph()
 graphrand.importFromFile("random.dot")
