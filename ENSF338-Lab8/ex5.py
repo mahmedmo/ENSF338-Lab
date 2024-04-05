@@ -143,3 +143,9 @@ graph3.addNode('C')
 print("\nTest case 3:")
 print("Graph is a DAG:", graph3.isdag())  # True
 print("Topological order:", graph3.toposort())  # ['A', 'B', 'C']
+
+graphrand = Graph()
+graphrand.importFromFile("random.dot")
+print("\nTest case 4:")
+print("Graph is a DAG:", graphrand.isdag())
+print("Topological order:", graphrand.toposort())
